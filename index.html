@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- UBAH JUDUL TAB BROWSER DI SINI -->
+  <title>APIP'S RETRO SPACE — 3D Playful Portfolio</title>
+
+  <!-- Google Fonts: Press Start 2P (Font Pixel) & Space Grotesk (Font Teks Utama) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            grotesk: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            retro: {
+              bg: '#FFF8E7',
+              darkBg: '#191326',
+              purple: '#8B5CF6',
+              deepPurple: '#5B21B6',
+              yellow: '#FFD100',
+              teal: '#00E5B3',
+              orange: '#FF6B35',
+              pink: '#FF499E',
+              red: '#FF2A54',
+              green: '#80ED99',
+              cardDark: '#261D3A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Memanggil File Desain CSS Terpisah (style.css) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="min-h-screen selection:bg-retro-yellow selection:text-black">
+
+  <!-- Efek Garis TV Tabung (CRT Overlay) -->
+  <div class="crt-overlay" id="crtOverlay"></div>
+
+  <!-- =========================================================
+       BAGIAN 1: HEADER & NAVIGASI ATAS
+       (Ubah nama logo & status "Sedang menyeduh kopi" di bawah)
+  ========================================================== -->
+  <header class="sticky top-0 z-50 px-4 pt-3 pb-2">
+    <nav class="max-w-6xl mx-auto bg-white dark:bg-retro-cardDark neo-box rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Logo Pojok Kiri Atas -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-xl bg-retro-purple clay-badge flex items-center justify-center text-white font-pixel text-sm group-hover:bg-retro-orange transition-colors">
+          64
+        </div>
+        <div>
+          <!-- UBAH NAMA LOGO DI SINI -->
+          <span class="font-pixel text-xs md:text-sm tracking-tight block text-black dark:text-white">APIP.OS v9.8</span>
+          <span class="text-xs font-bold text-retro-purple dark:text-retro-teal block">3D RETRO PORTFOLIO</span>
+        </div>
+      </a>
+
+      <!-- Badge Status: Sedang Menyeduh Kopi -->
+      <div class="hidden lg:flex items-center gap-2.5 bg-retro-green/30 dark:bg-retro-teal/20 border-2 border-black px-3.5 py-1.5 rounded-full shadow-[3px_3px_0px_#121212]">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 border border-black"></span>
+        </span>
+        <!-- UBAH TEKS STATUS DI SINI -->
+        <span class="text-xs font-extrabold tracking-wide text-black dark:text-white" id="liveStatusText">
+          🟢 Sedang menyeduh kopi...
+        </span>
+      </div>
+
+      <!-- Menu Navigasi & Saklar Konsol 3D -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="hidden md:flex items-center gap-1.5 mr-2 font-bold text-sm">
+          <a href="#stats" class="px-3 py-1.5 rounded-lg hover:bg-retro-yellow hover:text-black border-2 border-transparent hover:border-black transition-all">Statistik</a>
+          <a href="#hobi" class="px-3 py-1.5 rounded-lg hover:bg-retro-teal hover:text-black border-2 border-transparent hover:border-black transition-all">Pojok Hobi</a>
+          <a href="#opini" class="px-3 py-1.5 rounded-lg hover:bg-retro-orange hover:text-white border-2 border-transparent hover:border-black transition-all">Acak Opini</a>
+          <a href="#guestbook" class="px-3 py-1.5 rounded-lg hover:bg-retro-purple hover:text-white border-2 border-transparent hover:border-black transition-all">Guestbook</a>
+        </div>
+
+        <!-- Tombol Suara 8-Bit ON/OFF -->
+        <button id="sfxToggleBtn" onclick="toggleSFX()" title="Nyalakan/Matikan Suara 8-Bit"
+          class="arcade-btn bg-retro-teal text-black px-3 py-2 rounded-xl font-pixel text-[10px] flex items-center gap-1.5">
+          <span id="sfxIcon">🔊</span>
+          <span class="hidden sm:inline" id="sfxLabel">SFX:ON</span>
+        </button>
+
+        <!-- Saklar Konsol 3D: Mode Siang (SUN) / Malam (ARC) -->
+        <button id="themeToggleBtn" onclick="toggleRetroTheme()" title="Saklar Konsol 3D: Mode Siang / Malam"
+          class="relative w-24 h-11 bg-retro-yellow dark:bg-retro-purple border-4 border-black rounded-xl shadow-[4px_4px_0px_#121212] p-1 flex items-center justify-between cursor-pointer transition-colors select-none">
+          <span class="text-[10px] font-pixel pl-1 text-black dark:text-white">SUN</span>
+          <span class="text-[10px] font-pixel pr-1 text-black dark:text-white">ARC</span>
+          <div id="themeKnob"
+            class="absolute left-1 top-1 w-9 h-7 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_#121212] flex items-center justify-center text-sm transition-transform duration-200">
+            ☀️
+          </div>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Status Bar khusus layar HP -->
+    <div class="lg:hidden max-w-6xl mx-auto mt-2 flex justify-center">
+      <div class="inline-flex items-center gap-2 bg-white dark:bg-retro-cardDark border-2 border-black px-3 py-1 rounded-full shadow-[3px_3px_0px_#121212] text-xs font-bold">
+        <span>🟢 Sedang menyeduh kopi V60 hangat</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       BAGIAN 2: HERO SECTION & KARAKTER 3D DI TENGAH
+       (Ubah Nama Utama, Deskripsi Singkat, dan Foto Avatar di sini)
+  ========================================================== -->
+  <section id="hero" class="relative max-w-6xl mx-auto px-4 pt-6 pb-16 md:pt-10 md:pb-24">
+    
+    <!-- Pita Pengumuman Atas -->
+    <div class="mb-6 bg-retro-purple text-white border-4 border-black shadow-[6px_6px_0px_#121212] rounded-xl py-2 px-4 flex items-center justify-between overflow-hidden">
+      <div class="flex items-center gap-2 font-pixel text-[10px] sm:text-xs text-retro-yellow shrink-0">
+        <span>★ PLAYER 1 READY</span>
+      </div>
+      <div class="font-bold text-xs sm:text-sm truncate px-4">
+        Selamat datang di kamar kreatif 3D! Klik ornamen melayang atau tekan tombol arcade untuk bunyi 8-bit 🎵
+      </div>
+      <div class="hidden sm:flex items-center gap-1.5 shrink-0">
+        <span class="w-3 h-3 rounded-full bg-retro-red border-2 border-black"></span>
+        <span class="w-3 h-3 rounded-full bg-retro-yellow border-2 border-black"></span>
+        <span class="w-3 h-3 rounded-full bg-retro-teal border-2 border-black"></span>
+      </div>
+    </div>
+
+    <!-- Panggung Utama 3D -->
+    <div class="relative bg-gradient-to-b from-retro-purple/20 via-retro-yellow/15 to-retro-teal/20 dark:from-retro-deepPurple/40 dark:via-retro-cardDark dark:to-retro-purple/20 neo-box-lg rounded-3xl p-6 sm:p-10 md:p-12 overflow-hidden">
+      
+      <!-- JUDUL BESAR 3D DI ATAS KARAKTER -->
+      <div class="relative z-10 text-center max-w-4xl mx-auto mb-4 md:mb-6">
+        <div class="inline-block bg-retro-orange text-white font-pixel text-[10px] sm:text-xs px-4 py-1.5 rounded-lg border-3 border-black shadow-[4px_4px_0px_#121212] mb-4 animate-glitch">
+          WELCOME TO LEVEL 99 • CREATIVE PLAYGROUND
+        </div>
+
+        <!-- UBAH JUDUL BESAR (HEADLINE) DI SINI -->
+        <h1 class="font-pixel text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight md:leading-snug text-3d-retro tracking-tight select-none">
+          APIP’S RETRO SPACE
+        </h1>
+
+        <!-- UBAH SAPAAN & NAMA PANGGILAN DI SINI -->
+        <p class="mt-2 font-grotesk font-extrabold text-xl sm:text-2xl md:text-3xl text-black dark:text-white">
+          Hai, Aku <span class="bg-retro-teal text-black px-2.5 py-0.5 rounded-lg border-2 border-black shadow-[3px_3px_0px_#121212]">Apip!</span> 👋 Tukang Ngulik Kode, Kopi & Pop-Culture 90-an.
+        </p>
+      </div>
+
+      <!-- AREA KARAKTER 3D DI TENGAH + 6 ORNAMEN MELAYANG -->
+      <div id="heroParallaxStage" class="relative my-6 md:my-10 min-h-[370px] sm:min-h-[430px] flex items-center justify-center">
+        
+        <!-- Gelembung Bicara (Speech Bubble) di Atas Kepala Karakter -->
+        <div id="heroSpeechBubble"
+          class="absolute -top-5 sm:top-0 z-30 bg-white dark:bg-retro-yellow text-black border-4 border-black rounded-2xl px-4 py-2.5 shadow-[6px_6px_0px_#121212] max-w-xs sm:max-w-sm text-center font-bold text-xs sm:text-sm transition-all duration-300">
+          <span id="heroBubbleText">"Halo bosku! Klik ornamen 3D di sekitarku atau sapa aku ya! ☕🕹️"</span>
+          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-5 h-5 bg-white dark:bg-retro-yellow border-r-4 border-b-4 border-black rotate-45"></div>
+        </div>
+
+        <!-- Ornamen 1: Komputer CRT (Kiri Atas) -->
+        <button onclick="interactOrnament('crt')" data-parallax="22"
+          class="ornament-item animate-orbit-1 absolute left-1 sm:left-8 md:left-16 top-6 sm:top-10 z-20 clay-badge bg-retro-yellow p-2.5 sm:p-3.5 rounded-2xl flex flex-col items-center cursor-pointer"
+          title="Klik Komputer CRT!">
+          <svg class="w-12 h-12 sm:w-16 sm:h-16 drop-shadow-[2px_3px_0px_#121212]" viewBox="0 0 80 80" fill="none">
+            <rect x="8" y="10" width="64" height="50" rx="10" fill="#E5E0D8" stroke="#121212" stroke-width="4"/>
+            <rect x="15" y="17" width="50" height="34" rx="6" fill="#00E5B3" stroke="#121212" stroke-width="3.5"/>
+            <path d="M22 25H38M22 33H52M22 41H44" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="58" cy="54" r="2.5" fill="#FF2A54"/>
+            <path d="M26 60L20 70H60L54 60" fill="#C7BFB3" stroke="#121212" stroke-width="4" stroke-linejoin="round"/>
+          </svg>
+          <span class="font-pixel text-[8px] sm:text-[9px] bg-black text-white px-2 py-0.5 rounded mt-1">CRT-95</span>
+        </button>
+
+        <!-- Ornamen 2: Disket Floppy (Kiri Tengah) -->
+        <button onclick="interactOrnament('floppy')" data-parallax="-18"
+          class="ornament-item animate-orbit-2 absolute left-0 sm:left-4 md:left-10 bottom-20 sm:bottom-24 z-20 clay-badge bg-retro-purple text-white p-2.5 sm:p-3.5 rounded-2xl flex flex-col items-center cursor-pointer"
+          title="Klik Disket 1.44MB!">
+          <svg class="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-[2px_3px_0px_#121212]" viewBox="0 0 80 80" fill="none">
+            <path d="M12 10H58L68 20V68C68 70.2 66.2 72 64 72H12C9.8 72 8 70.2 8 68V14C8 11.8 9.8 10 12 10Z" fill="#FF499E" stroke="#121212" stroke-width="4"/>
+            <rect x="22" y="10" width="30" height="22" rx="3" fill="#E2E8F0" stroke="#121212" stroke-width="3.5"/>
+            <rect x="38" y="14" width="8" height="14" rx="1.5" fill="#121212"/>
+            <rect x="18" y="42" width="40" height="28" rx="4" fill="#FFF8E7" stroke="#121212" stroke-width="3.5"/>
+            <path d="M25 52H51M25 60H43" stroke="#121212" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span class="font-pixel text-[8px] sm:text-[9px] bg-retro-yellow text-black border border-black px-1.5 py-0.5 rounded mt-1">1.44MB</span>
+        </button>
+
+        <!-- Ornamen 3: Cangkir Kopi (Kiri Bawah) -->
+        <button onclick="interactOrnament('coffee')" data-parallax="15"
+          class="ornament-item animate-orbit-3 absolute left-6 sm:left-20 md:left-32 -bottom-2 sm:bottom-2 z-20 clay-badge bg-retro-teal p-2.5 sm:p-3.5 rounded-2xl flex flex-col items-center cursor-pointer"
+          title="Klik Cangkir Kopi!">
+          <svg class="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-[2px_3px_0px_#121212]" viewBox="0 0 80 80" fill="none">
+            <path d="M26 18C26 14 30 12 30 8M38 18C38 14 42 12 42 8" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M52 32H60C64.4 32 68 35.6 68 40V44C68 48.4 64.4 52 60 52H52" stroke="#121212" stroke-width="4"/>
+            <path d="M16 26H54V52C54 61.9 45.9 70 36 70H34C24.1 70 16 61.9 16 52V26Z" fill="#FF6B35" stroke="#121212" stroke-width="4"/>
+            <ellipse cx="35" cy="26" rx="19" ry="5" fill="#4A2511" stroke="#121212" stroke-width="3.5"/>
+          </svg>
+          <span class="font-pixel text-[8px] sm:text-[9px] bg-black text-white px-2 py-0.5 rounded mt-1">KOPI+99</span>
+        </button>
+
+        <!-- Ornamen 4: Gamepad (Kanan Atas) -->
+        <button onclick="interactOrnament('gamepad')" data-parallax="-24"
+          class="ornament-item animate-orbit-4 absolute right-1 sm:right-8 md:right-16 top-6 sm:top-10 z-20 clay-badge bg-retro-orange text-white p-2.5 sm:p-3.5 rounded-2xl flex flex-col items-center cursor-pointer"
+          title="Klik Gamepad Retro!">
+          <svg class="w-12 h-12 sm:w-16 sm:h-16 drop-shadow-[2px_3px_0px_#121212]" viewBox="0 0 80 80" fill="none">
+            <rect x="6" y="22" width="68" height="38" rx="19" fill="#FFF8E7" stroke="#121212" stroke-width="4"/>
+            <path d="M24 33V49M16 41H32" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="58" cy="36" r="5" fill="#FF2A54" stroke="#121212" stroke-width="3"/>
+            <circle cx="48" cy="45" r="5" fill="#8B5CF6" stroke="#121212" stroke-width="3"/>
+            <rect x="35" y="46" width="6" height="3" rx="1.5" fill="#121212"/>
+          </svg>
+          <span class="font-pixel text-[8px] sm:text-[9px] bg-retro-yellow text-black border border-black px-1.5 py-0.5 rounded mt-1">16-BIT</span>
+        </button>
+
+        <!-- Ornamen 5: Kaset Pita Mixtape (Kanan Tengah) -->
+        <button onclick="interactOrnament('cassette')" data-parallax="20"
+          class="ornament-item animate-orbit-5 absolute right-0 sm:right-4 md:right-10 bottom-20 sm:bottom-24 z-20 clay-badge bg-retro-pink text-white p-2.5 sm:p-3.5 rounded-2xl flex flex-col items-center cursor-pointer"
+          title="Klik Kaset Pita 90-an!">
+          <svg class="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-[2px_3px_0px_#121212]" viewBox="0 0 80 80" fill="none">
+            <rect x="8" y="18" width="64" height="44" rx="7" fill="#FFD100" stroke="#121212" stroke-width="4"/>
+            <rect x="15" y="25" width="50" height="22" rx="4" fill="#00E5B3" stroke="#121212" stroke-width="3.5"/>
+            <circle cx="28" cy="36" r="6" fill="#FFF8E7" stroke="#121212" stroke-width="3.5"/>
+            <circle cx="52" cy="36" r="6" fill="#FFF8E7" stroke="#121212" stroke-width="3.5"/>
+            <path d="M22 62L27 52H53L58 62" fill="#8B5CF6" stroke="#121212" stroke-width="3.5"/>
+          </svg>
+          <span class="font-pixel text-[8px] sm:text-[9px] bg-black text-white px-2 py-0.5 rounded mt-1">MIXTAPE</span>
+        </button>
+
+        <!-- Ornamen 6: Slice Pizza (Kanan Bawah) -->
+        <button onclick="interactOrnament('pizza')" data-parallax="-14"
+          class="ornament-item animate-orbit-6 absolute right-6 sm:right-20 md:right-32 -bottom-2 sm:bottom-2 z-20 clay-badge bg-retro-green p-2.5 sm:p-3.5 rounded-2xl flex flex-col items-center cursor-pointer"
+          title="Klik Slice Pizza!">
+          <svg class="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-[2px_3px_0px_#121212]" viewBox="0 0 80 80" fill="none">
+            <path d="M40 12L68 62C52 70 28 70 12 62L40 12Z" fill="#FFD100" stroke="#121212" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M12 62C28 70 52 70 68 62L71 67C53 76 27 76 9 67L12 62Z" fill="#FF6B35" stroke="#121212" stroke-width="3.5"/>
+            <circle cx="38" cy="36" r="5" fill="#FF2A54" stroke="#121212" stroke-width="3"/>
+            <circle cx="30" cy="50" r="5.5" fill="#FF2A54" stroke="#121212" stroke-width="3"/>
+            <circle cx="48" cy="51" r="5" fill="#FF2A54" stroke="#121212" stroke-width="3"/>
+          </svg>
+          <span class="font-pixel text-[8px] sm:text-[9px] bg-black text-white px-2 py-0.5 rounded mt-1">HP +100</span>
+        </button>
+
+        <!-- =====================================================
+             BINGKAI KARAKTER 3D UTAMA DI TENGAH
+             (Menggunakan avatar-3d.png hasil referensi fotomu!)
+        ====================================================== -->
+        <div class="relative z-10 flex flex-col items-center">
+          <div class="absolute -inset-4 bg-gradient-to-tr from-retro-purple via-retro-yellow to-retro-teal rounded-full blur-xl opacity-45 animate-pulse"></div>
+
+          <div id="characterAvatarBox" onclick="pokeCharacter()"
+            class="animate-character relative w-64 h-64 sm:w-76 sm:h-76 md:w-80 md:h-80 rounded-[2.5rem] bg-gradient-to-b from-retro-purple to-retro-deepPurple border-4 border-black shadow-[12px_12px_0px_#121212] flex items-center justify-center overflow-hidden cursor-pointer group">
+
+            <!-- GAMBAR AVATAR 3D UTAMA (Bisa diganti antara avatar-3d.png, avatar-wave.png, atau foto-asli.jpg) -->
+            <img id="avatarRenderImg" src="avatar-3d.png" alt="Avatar 3D Retro"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              onerror="this.classList.add('hidden'); document.getElementById('svgClayAvatar').classList.remove('hidden');" />
+
+            <!-- Mode Cadangan Vektor SVG 3D (Muncul saat tombol ganti mode diklik) -->
+            <svg id="svgClayAvatar" class="hidden w-full h-full p-2" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="160" cy="165" r="115" fill="#FFD100" stroke="#121212" stroke-width="5"/>
+              <path d="M72 295C75 230 105 206 160 206C215 206 245 230 248 295H72Z" fill="#95A78D" stroke="#121212" stroke-width="6"/>
+              <rect x="142" y="182" width="36" height="34" rx="14" fill="#E6A972" stroke="#121212" stroke-width="6"/>
+              <rect x="98" y="76" width="124" height="118" rx="54" fill="#E6A972" stroke="#121212" stroke-width="6"/>
+              <ellipse cx="134" cy="136" rx="9" ry="11" fill="#121212"/>
+              <ellipse cx="186" cy="136" rx="9" ry="11" fill="#121212"/>
+              <path d="M138 162C145 170 175 170 182 162" stroke="#121212" stroke-width="5.5" stroke-linecap="round"/>
+              <path d="M160 60C115 58 84 84 88 134C98 122 116 108 134 98C148 90 156 76 160 60Z" fill="#1E1B24" stroke="#121212" stroke-width="6"/>
+              <path d="M160 60C205 58 236 84 232 134C222 122 204 108 186 98C172 90 164 76 160 60Z" fill="#1E1B24" stroke="#121212" stroke-width="6"/>
+            </svg>
+
+            <!-- Label Bawah di Dalam Bingkai Foto -->
+            <div class="absolute bottom-3 inset-x-3 flex items-center justify-between bg-black/85 text-white px-3 py-1.5 rounded-xl border-2 border-white/40 backdrop-blur-sm">
+              <span class="font-pixel text-[9px] text-retro-teal">LVL 25 CREATOR</span>
+              <span class="text-[11px] font-bold text-retro-yellow">Klik buat Sapa! ✨</span>
+            </div>
+          </div>
+
+          <!-- Tombol Ganti Mode Avatar (3D Clay Portrait / 3D Melambai / Foto Asli / Vector) -->
+          <div class="mt-3 flex items-center gap-2">
+            <button onclick="toggleAvatarStyle()" id="avatarModeLabel"
+              class="text-xs font-bold bg-white dark:bg-retro-cardDark border-2 border-black px-3.5 py-1.5 rounded-full shadow-[3px_3px_0px_#121212] hover:bg-retro-yellow hover:text-black transition-colors cursor-pointer">
+              🔄 Mode: 3D Clay Avatar (Klik ganti ke 3D Melambai / Foto Asli)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESKRIPSI SINGKAT & TOMBOL CTA ARCADE -->
+      <div class="relative z-20 text-center max-w-2xl mx-auto mt-4">
+        <!-- UBAH DESKRIPSI TENTANG DIRIMU DI SINI -->
+        <p class="text-base sm:text-lg font-medium text-black/90 dark:text-white/90 leading-relaxed mb-7 bg-white/80 dark:bg-retro-cardDark/90 p-4 rounded-2xl border-3 border-black shadow-[5px_5px_0px_#121212]">
+          Meracik web interaktif rasa mainan 3D, menyeduh kopi manual brew setiap pagi, dan mengoleksi nostalgia era kaset pita & konsol 90-an. Yuk jelajahi ruang bermain digitalku!
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="#hobi" onclick="playArcadeSFX('start')"
+            class="arcade-btn bg-retro-yellow text-black font-pixel text-xs sm:text-sm px-7 py-4 rounded-2xl flex items-center gap-3">
+            <span>🕹️ MULAI MAIN / JELAJAHI</span>
+          </a>
+          <a href="#opini" onclick="playArcadeSFX('coin')"
+            class="arcade-btn bg-retro-teal text-black font-pixel text-xs sm:text-sm px-6 py-4 rounded-2xl flex items-center gap-2">
+            <span>🎲 ACAK OPINI!</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       BAGIAN 3: BOARD STATISTIK 3D (FUN STATS)
+       (Ubah angka atau judul statistik lucu di bawah ini)
+  ========================================================== -->
+  <section id="stats" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+      <div>
+        <div class="inline-block bg-retro-teal text-black font-pixel text-[10px] px-3 py-1 rounded-md border-2 border-black shadow-[3px_3px_0px_#121212] mb-2">
+          PLAYER STATS & ACHIEVEMENTS
+        </div>
+        <h2 class="font-pixel text-xl sm:text-3xl text-black dark:text-white">
+          📊 BOARD STATISTIK 3D
+        </h2>
+      </div>
+      <p class="text-sm font-bold text-black/75 dark:text-white/75">
+        *Klik kartu untuk efek membal 3D & tambah skor real-time!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- Kartu Statistik 1: Kopi -->
+      <div onclick="bumpStat('coffeeStat', 1, '☕ Slurp! +1 Kopi diseduh!')"
+        class="neo-card-interactive bg-retro-yellow text-black rounded-2xl p-6 cursor-pointer">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-16 h-16 rounded-2xl bg-white clay-badge flex items-center justify-center text-3xl">☕</div>
+          <span class="font-pixel text-[10px] bg-black text-retro-yellow px-2.5 py-1 rounded-lg">CAFFEINE</span>
+        </div>
+        <div class="font-pixel text-2xl sm:text-3xl mb-1 tracking-tight" id="coffeeStat">1,200+</div>
+        <div class="font-extrabold text-base">☕ Cangkir Kopi</div>
+        <p class="text-xs font-bold mt-2 bg-white/70 border-2 border-black rounded-lg px-2.5 py-1 inline-block">
+          V60, Moka Pot & Es Kopi Susu
+        </p>
+      </div>
+
+      <!-- Kartu Statistik 2: Film / Game -->
+      <div onclick="bumpStat('gameStat', 5, '🎮 Level Up! +5 Jam Maraton!')"
+        class="neo-card-interactive bg-retro-purple text-white rounded-2xl p-6 cursor-pointer">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-16 h-16 rounded-2xl bg-retro-yellow clay-badge flex items-center justify-center text-3xl">🎮</div>
+          <span class="font-pixel text-[10px] bg-retro-yellow text-black border border-black px-2.5 py-1 rounded-lg">PLAYTIME</span>
+        </div>
+        <div class="font-pixel text-2xl sm:text-3xl mb-1 tracking-tight text-retro-yellow" id="gameStat">850+</div>
+        <div class="font-extrabold text-base">🎮 Jam Maraton Film/Game</div>
+        <p class="text-xs font-bold mt-2 bg-black/40 border-2 border-black rounded-lg px-2.5 py-1 inline-block">
+          JRPG 90-an & Sci-Fi Classics
+        </p>
+      </div>
+
+      <!-- Kartu Statistik 3: Resep / Papeda -->
+      <div onclick="bumpStat('papedaStat', 1, '🍲 Tekstur Papeda Makin Lumer Sempurna!')"
+        class="neo-card-interactive bg-retro-teal text-black rounded-2xl p-6 cursor-pointer">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-16 h-16 rounded-2xl bg-white clay-badge flex items-center justify-center text-3xl">🎲</div>
+          <span class="font-pixel text-[10px] bg-black text-retro-teal px-2.5 py-1 rounded-lg">COOKING</span>
+        </div>
+        <div class="font-pixel text-2xl sm:text-3xl mb-1 tracking-tight" id="papedaStat">95%</div>
+        <div class="font-extrabold text-base">🎲 Sukses Bikin Papeda/Resep</div>
+        <p class="text-xs font-bold mt-2 bg-white/70 border-2 border-black rounded-lg px-2.5 py-1 inline-block">
+          5% sisanya jadi lem kertas estetik
+        </p>
+      </div>
+
+      <!-- Kartu Statistik 4: Memori -->
+      <div onclick="bumpStat('memoryStat', 0, '💾 Save State Berhasil! Memori Aman!')"
+        class="neo-card-interactive bg-retro-orange text-white rounded-2xl p-6 cursor-pointer">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-16 h-16 rounded-2xl bg-retro-yellow clay-badge flex items-center justify-center text-3xl">💾</div>
+          <span class="font-pixel text-[10px] bg-black text-white px-2.5 py-1 rounded-lg">MEMORY</span>
+        </div>
+        <div class="font-pixel text-2xl sm:text-3xl mb-1 tracking-tight text-retro-yellow" id="memoryStat">99.9%</div>
+        <div class="font-extrabold text-base">💾 Memori Terselamatkan</div>
+        <p class="text-xs font-bold mt-2 bg-black/40 border-2 border-black rounded-lg px-2.5 py-1 inline-block">
+          Memory Card PS1 Aman Sentosa
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       BAGIAN 4: POJOK HOBI & MEDIA (3 TAB INTERAKTIF)
+  ========================================================== -->
+  <section id="hobi" class="max-w-6xl mx-auto px-4 py-14">
+    <div class="bg-white dark:bg-retro-cardDark neo-box-lg rounded-3xl overflow-hidden">
+      
+      <!-- Bar Judul Komputer Jadul -->
+      <div class="bg-retro-purple text-white border-b-4 border-black px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-4 h-4 rounded-full bg-retro-red border-2 border-black inline-block"></span>
+          <span class="w-4 h-4 rounded-full bg-retro-yellow border-2 border-black inline-block"></span>
+          <span class="w-4 h-4 rounded-full bg-retro-teal border-2 border-black inline-block"></span>
+          <span class="font-pixel text-xs sm:text-sm ml-2 tracking-wide">C:\APIP\POJOK_HOBI_MEDIA.EXE</span>
+        </div>
+        <span class="font-pixel text-[10px] bg-black text-retro-teal px-2.5 py-1 rounded border border-white/30">
+          3D DECK ACTIVE
+        </span>
+      </div>
+
+      <!-- Tombol Pemilih Tab -->
+      <div class="p-5 sm:p-8 bg-retro-bg/60 dark:bg-black/30 border-b-4 border-black">
+        <h2 class="font-pixel text-lg sm:text-2xl text-black dark:text-white mb-2">
+          🕹️ POJOK HOBI & MEDIA
+        </h2>
+        <p class="text-sm font-bold text-black/75 dark:text-white/75 mb-6">
+          Pilih kaset tab di bawah untuk mengintip racikan kopi, koleksi VHS film, atau menyetel musik chiptune!
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <button onclick="switchHobbyTab('kopi')" id="tabBtn-kopi"
+            class="arcade-btn bg-retro-yellow text-black font-pixel text-xs py-4 px-5 rounded-2xl flex items-center justify-center gap-3">
+            <span class="text-xl">☕</span>
+            <span>TAB 01: KOPI LAB</span>
+          </button>
+          <button onclick="switchHobbyTab('film')" id="tabBtn-film"
+            class="arcade-btn bg-white dark:bg-retro-cardDark text-black dark:text-white font-pixel text-xs py-4 px-5 rounded-2xl flex items-center justify-center gap-3">
+            <span class="text-xl">📼</span>
+            <span>TAB 02: LETTERBOXD FILM</span>
+          </button>
+          <button onclick="switchHobbyTab('musik')" id="tabBtn-musik"
+            class="arcade-btn bg-white dark:bg-retro-cardDark text-black dark:text-white font-pixel text-xs py-4 px-5 rounded-2xl flex items-center justify-center gap-3">
+            <span class="text-xl">🎧</span>
+            <span>TAB 03: SPOTIFY & LAGU</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ISI KONTEN TAB -->
+      <div class="p-6 sm:p-8">
+
+        <!-- TAB 1: KOPI -->
+        <div id="tabPanel-kopi" class="hobby-panel grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-5 bg-retro-teal/25 dark:bg-retro-teal/10 neo-box rounded-2xl p-6 flex flex-col items-center text-center relative">
+            <div class="my-4 w-40 h-40 bg-retro-yellow clay-badge rounded-3xl flex items-center justify-center cursor-pointer"
+              onclick="brewMokaAnimation()">
+              <svg id="mokaPotSvg" class="w-28 h-28 transition-transform duration-300" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="17" r="5" fill="#121212"/>
+                <path d="M32 24L50 18L68 24H32Z" fill="#CBD5E1" stroke="#121212" stroke-width="4"/>
+                <path d="M26 24H72L64 54H36L26 24Z" fill="#E2E8F0" stroke="#121212" stroke-width="4"/>
+                <rect x="34" y="54" width="32" height="6" rx="2" fill="#FF6B35" stroke="#121212" stroke-width="3.5"/>
+                <path d="M36 60H64L72 88H28L36 60Z" fill="#94A3B8" stroke="#121212" stroke-width="4"/>
+              </svg>
+            </div>
+            <h3 class="font-pixel text-sm text-black dark:text-white mt-2">BIALETTI MOKA POT 3D</h3>
+            <button onclick="brewMokaAnimation()"
+              class="mt-4 arcade-btn bg-retro-orange text-white font-pixel text-[10px] px-4 py-2.5 rounded-xl">
+              🔥 TEST SEDUH SEKARANG!
+            </button>
+            <p id="mokaBrewStatus" class="text-xs font-extrabold text-retro-purple dark:text-retro-yellow mt-2 min-h-[1.25rem]"></p>
+          </div>
+
+          <!-- UBAH RESEP KOPI FAVORITMU DI SINI -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="bg-retro-yellow text-black neo-box rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-pixel text-xs bg-black text-retro-yellow px-2.5 py-1 rounded">RESEP RAHASIA #01</span>
+                <span class="font-extrabold text-sm">⏱️ Waktu: 03:15 Menit</span>
+              </div>
+              <h3 class="font-grotesk font-extrabold text-xl sm:text-2xl">
+                "Es Kopi Susu Retro Creamy (Moka Pot Base)"
+              </h3>
+              <p class="text-sm font-bold mt-1">
+                Perpaduan biji Arabika Flores Bajawa medium-dark roast dengan susu oat dingin & sedikit gula aren cair.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="bg-white dark:bg-retro-bg/10 neo-card-interactive rounded-xl p-4">
+                <div class="font-pixel text-xs text-retro-purple dark:text-retro-teal mb-1">01. DOSE</div>
+                <div class="font-extrabold text-lg">18 Gram</div>
+                <p class="text-xs font-bold opacity-80">Gilingan Medium-Fine</p>
+              </div>
+              <div class="bg-white dark:bg-retro-bg/10 neo-card-interactive rounded-xl p-4">
+                <div class="font-pixel text-xs text-retro-orange mb-1">02. WATER</div>
+                <div class="font-extrabold text-lg">160 ml (Panas)</div>
+                <p class="text-xs font-bold opacity-80">Di bawah katup uap</p>
+              </div>
+              <div class="bg-white dark:bg-retro-bg/10 neo-card-interactive rounded-xl p-4">
+                <div class="font-pixel text-xs text-retro-pink mb-1">03. MAGIC TIP</div>
+                <div class="font-extrabold text-lg">Api Kecil</div>
+                <p class="text-xs font-bold opacity-80">Angkat saat mendesis!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             TAB 2: REVIEW FILM (TERHUBUNG KE LETTERBOXD @dorepap)
+             * Otomatis mengambil diary/review terbaru dari https://letterboxd.com/dorepap/
+             * Jika dibuka offline, kamu juga bisa mengedit daftar fallback di file script.js
+        ========================================================== -->
+        <div id="tabPanel-film" class="hobby-panel hidden">
+          
+          <!-- Banner Header Profil Letterboxd @dorepap -->
+          <div class="mb-6 bg-black text-white neo-box rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+              <!-- Ikon 3 Dots Khas Letterboxd -->
+              <div class="flex items-center gap-1 bg-white/10 px-3 py-2.5 rounded-xl border-2 border-white/30">
+                <span class="w-3.5 h-3.5 rounded-full bg-[#FF8000] inline-block border border-black"></span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#00E054] inline-block border border-black"></span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#40BCF4] inline-block border border-black"></span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-pixel text-xs sm:text-sm text-retro-yellow">LETTERBOXD DIARY</span>
+                  <span id="letterboxdSyncBadge" class="font-pixel text-[9px] bg-retro-teal text-black px-2 py-0.5 rounded">
+                    SYNC: @dorepap
+                  </span>
+                </div>
+                <p class="text-xs sm:text-sm font-bold text-white/85 mt-0.5">
+                  Log tontonan & ulasan film langsung dari profil Letterboxd <span class="text-retro-teal underline">@dorepap</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+              <button onclick="fetchLetterboxdReviews(true)" title="Muat Ulang RSS Letterboxd"
+                class="arcade-btn bg-retro-purple text-white font-pixel text-[10px] px-3.5 py-2.5 rounded-xl">
+                🔄 SYNC
+              </button>
+              <a href="https://letterboxd.com/dorepap/" target="_blank" rel="noopener noreferrer" onclick="playArcadeSFX('coin')"
+                class="arcade-btn bg-retro-yellow text-black font-pixel text-[10px] px-4 py-2.5 rounded-xl flex items-center gap-1.5">
+                <span>🎬 BUKA LETTERBOXD</span>
+                <span>↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Grid Kartu VHS Review Film (Diisi otomatis oleh script.js dari Letterboxd @dorepap) -->
+          <div id="letterboxdReviewsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Kartu VHS Default 1 (Sekaligus Fallback jika offline) -->
+            <div class="neo-card-interactive bg-retro-yellow text-black rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <div class="bg-black text-white p-3 rounded-xl border-2 border-black mb-4 flex items-center justify-between">
+                  <span class="font-pixel text-[10px] text-retro-teal">LETTERBOXD • @dorepap</span>
+                  <span>🎬</span>
+                </div>
+                <div class="inline-block bg-white border-2 border-black px-2.5 py-0.5 rounded font-pixel text-[10px] mb-2">★★★★★</div>
+                <h3 class="font-extrabold text-xl mb-2">La Haine (1995)</h3>
+                <p class="text-sm font-bold bg-white/80 p-3 rounded-xl border-2 border-black">
+                  "Sinematografi hitam-putih paling keren dari era 90-an. Setiap detiknya terasa tegang, mentah, dan ikonik sampai kalimat terakhirnya!"
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t-2 border-dashed border-black flex items-center justify-between text-xs font-extrabold">
+                <span>🎞️ Logged by @dorepap</span>
+                <a href="https://letterboxd.com/dorepap/" target="_blank" rel="noopener noreferrer" class="bg-black text-retro-yellow px-2.5 py-1 rounded hover:bg-retro-purple hover:text-white transition-colors">Baca Review ↗</a>
+              </div>
+            </div>
+
+            <!-- Kartu VHS Default 2 -->
+            <div class="neo-card-interactive bg-retro-teal text-black rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <div class="bg-black text-white p-3 rounded-xl border-2 border-black mb-4 flex items-center justify-between">
+                  <span class="font-pixel text-[10px] text-retro-yellow">LETTERBOXD • @dorepap</span>
+                  <span>🎞️</span>
+                </div>
+                <div class="inline-block bg-white border-2 border-black px-2.5 py-0.5 rounded font-pixel text-[10px] mb-2">★★★★★</div>
+                <h3 class="font-extrabold text-xl mb-2">Fallen Angels (1995)</h3>
+                <p class="text-sm font-bold bg-white/80 p-3 rounded-xl border-2 border-black">
+                  "Lensa wide-angle Wong Kar-wai + warna neon hijau Hong Kong malam hari = definisi estetika retro yang nggak ada obatnya."
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t-2 border-dashed border-black flex items-center justify-between text-xs font-extrabold">
+                <span>🎞️ Logged by @dorepap</span>
+                <a href="https://letterboxd.com/dorepap/" target="_blank" rel="noopener noreferrer" class="bg-black text-retro-teal px-2.5 py-1 rounded hover:bg-retro-purple hover:text-white transition-colors">Baca Review ↗</a>
+              </div>
+            </div>
+
+            <!-- Kartu VHS Default 3 -->
+            <div class="neo-card-interactive bg-retro-pink text-white rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <div class="bg-black text-white p-3 rounded-xl border-2 border-black mb-4 flex items-center justify-between">
+                  <span class="font-pixel text-[10px] text-retro-pink">LETTERBOXD • @dorepap</span>
+                  <span>🍿</span>
+                </div>
+                <div class="inline-block bg-retro-yellow text-black border-2 border-black px-2.5 py-0.5 rounded font-pixel text-[10px] mb-2">★★★★½</div>
+                <h3 class="font-extrabold text-xl mb-2">Before Sunrise (1995)</h3>
+                <p class="text-sm font-bold bg-black/35 p-3 rounded-xl border-2 border-black">
+                  "Cuma modal ngobrol jalan kaki keliling kota semalaman sambil dengerin piringan hitam di listening booth, tapi rasanya hangat banget."
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t-2 border-dashed border-black flex items-center justify-between text-xs font-extrabold">
+                <span>🎞️ Logged by @dorepap</span>
+                <a href="https://letterboxd.com/dorepap/" target="_blank" rel="noopener noreferrer" class="bg-retro-yellow text-black border border-black px-2.5 py-1 rounded hover:bg-black hover:text-white transition-colors">Baca Review ↗</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =========================================================
+             TAB 3: SPOTIFY & MUSIK FAVORIT (TERHUBUNG KE PROFIL SPOTIFY KAMU)
+             * Menampilkan 3 Rekomendasi Lagu Utama:
+               1. Blur - Charmless Man
+               2. Blur - Yuko and Hiro
+               3. The Lemon Twigs - Corner Of My Eye
+        ========================================================== -->
+        <div id="tabPanel-musik" class="hobby-panel hidden">
+          
+          <!-- Banner Profil Spotify -->
+          <div class="mb-6 bg-[#1DB954] text-black neo-box rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-black text-[#1DB954] border-3 border-black shadow-[4px_4px_0px_#121212] flex items-center justify-center text-2xl font-extrabold">
+                🎧
+              </div>
+              <div>
+                <div class="font-pixel text-xs sm:text-sm text-black">SPOTIFY ROTATION & PLAYLISTS</div>
+                <p class="text-xs sm:text-sm font-extrabold text-black/85 mt-0.5">
+                  Terhubung ke profil Spotify resmi • Britpop 90-an & Indie Rock Pilihan!
+                </p>
+              </div>
+            </div>
+
+            <!-- Link Langsung ke Profil Spotify Kamu -->
+            <a href="https://open.spotify.com/user/618sf2ln7u25muty9vgeylg2q?si=a7b45010fb7f45bc" target="_blank" rel="noopener noreferrer" onclick="playArcadeSFX('coin')"
+              class="arcade-btn bg-black text-[#1DB954] font-pixel text-[10px] px-4 py-3 rounded-xl flex items-center gap-2 shrink-0">
+              <span>🟢 BUKA PROFIL & PLAYLIST SPOTIFY</span>
+              <span>↗</span>
+            </a>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Kolom Kiri (7 Kolom): Pemutar Spotify Embed Resmi + 8-Bit Deck -->
+            <div class="lg:col-span-7 bg-retro-purple text-white neo-box rounded-2xl p-5 sm:p-6">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <span class="font-pixel text-xs text-retro-yellow">🎵 NOW SPINNING ON SPOTIFY</span>
+                <span id="playerStateBadge" class="font-pixel text-[10px] bg-black text-retro-teal px-2.5 py-1 rounded">
+                  TRACK 01 / 03
+                </span>
+              </div>
+
+              <!-- Judul Lagu Aktif -->
+              <div class="bg-retro-yellow text-black border-4 border-black rounded-2xl p-4 mb-4 shadow-[4px_4px_0px_#121212]">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span id="currentTrackArtistBadge" class="font-pixel text-[9px] bg-black text-retro-yellow px-2 py-0.5 rounded">
+                    BLUR • THE GREAT ESCAPE (1995)
+                  </span>
+                  <a id="currentTrackSpotifyLink" href="https://open.spotify.com/track/7lJ9MeQgqHlBrE69omD4rN" target="_blank" rel="noopener noreferrer"
+                    class="text-xs font-extrabold underline hover:text-retro-purple">
+                    Dengar di App Spotify ↗
+                  </a>
+                </div>
+                <div class="font-grotesk font-extrabold text-lg sm:text-xl truncate" id="currentTrackTitle">
+                  01. Blur — Charmless Man
+                </div>
+              </div>
+
+              <!-- Pemutar Embed Resmi Spotify (Bisa langsung di-Play!) -->
+              <div class="border-4 border-black rounded-2xl overflow-hidden shadow-[6px_6px_0px_#121212] bg-black mb-5">
+                <iframe id="spotifyEmbedFrame"
+                  style="border-radius:12px"
+                  src="https://open.spotify.com/embed/track/7lJ9MeQgqHlBrE69omD4rN?utm_source=generator&theme=0"
+                  width="100%"
+                  height="152"
+                  frameBorder="0"
+                  allowfullscreen=""
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy">
+                </iframe>
+              </div>
+
+              <!-- Tombol Ganti Lagu & Efek Synthesizer 8-Bit -->
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <button onclick="prevTrack()" class="arcade-btn bg-white text-black font-pixel text-[10px] px-3.5 py-2.5 rounded-xl">
+                    ⏮ PREV
+                  </button>
+                  <button onclick="nextTrack()" class="arcade-btn bg-white text-black font-pixel text-[10px] px-3.5 py-2.5 rounded-xl">
+                    NEXT ⏭
+                  </button>
+                </div>
+
+                <button onclick="toggleChiptunePlayer()" id="playPauseBtn"
+                  class="arcade-btn bg-retro-teal text-black font-pixel text-[10px] px-4 py-2.5 rounded-xl">
+                  🎹 MODE 8-BIT SYNTH: OFF
+                </button>
+              </div>
+            </div>
+
+            <!-- Kolom Kanan (5 Kolom): Daftar 3 Rekomendasi Lagu & Kartu Profil Playlist -->
+            <div class="lg:col-span-5 space-y-3.5">
+              <div class="font-pixel text-xs text-black dark:text-white mb-1 flex items-center justify-between">
+                <span>💿 TOP 3 REKOMENDASI LAGU:</span>
+                <span class="text-[10px] text-retro-purple dark:text-retro-teal">(Klik lagu untuk putar)</span>
+              </div>
+
+              <!-- Lagu 1: Blur - Charmless Man -->
+              <div onclick="selectRecommendedTrack(0)" id="recTrackCard-0"
+                class="bg-retro-yellow text-black neo-card-interactive rounded-2xl p-4 cursor-pointer flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-11 h-11 rounded-xl bg-black text-retro-yellow font-pixel text-xs flex items-center justify-center shrink-0 border-2 border-black">
+                    01
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-base truncate">Charmless Man</div>
+                    <div class="text-xs font-bold opacity-85 truncate">Blur • The Great Escape (1995)</div>
+                  </div>
+                </div>
+                <span class="font-pixel text-[9px] bg-black text-retro-teal px-2.5 py-1 rounded shrink-0">▶ PUTAR</span>
+              </div>
+
+              <!-- Lagu 2: Blur - Yuko and Hiro -->
+              <div onclick="selectRecommendedTrack(1)" id="recTrackCard-1"
+                class="bg-white dark:bg-retro-cardDark text-black dark:text-white neo-card-interactive rounded-2xl p-4 cursor-pointer flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-11 h-11 rounded-xl bg-retro-teal text-black font-pixel text-xs flex items-center justify-center shrink-0 border-2 border-black">
+                    02
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-base truncate">Yuko and Hiro</div>
+                    <div class="text-xs font-bold opacity-85 truncate">Blur • The Great Escape (1995)</div>
+                  </div>
+                </div>
+                <span class="font-pixel text-[9px] bg-retro-purple text-white px-2.5 py-1 rounded shrink-0">▶ PUTAR</span>
+              </div>
+
+              <!-- Lagu 3: The Lemon Twigs - Corner Of My Eye -->
+              <div onclick="selectRecommendedTrack(2)" id="recTrackCard-2"
+                class="bg-white dark:bg-retro-cardDark text-black dark:text-white neo-card-interactive rounded-2xl p-4 cursor-pointer flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-11 h-11 rounded-xl bg-retro-orange text-white font-pixel text-xs flex items-center justify-center shrink-0 border-2 border-black">
+                    03
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-base truncate">Corner Of My Eye</div>
+                    <div class="text-xs font-bold opacity-85 truncate">The Lemon Twigs • Everything Harmony</div>
+                  </div>
+                </div>
+                <span class="font-pixel text-[9px] bg-retro-purple text-white px-2.5 py-1 rounded shrink-0">▶ PUTAR</span>
+              </div>
+
+              <!-- Kartu Shortcut ke Koleksi Playlist Spotify -->
+              <div class="bg-retro-teal text-black neo-box rounded-2xl p-4 mt-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-pixel text-[10px] bg-black text-retro-yellow px-2 py-0.5 rounded">KOLEKSI PLAYLIST</span>
+                  <span class="text-sm font-extrabold">🎶 Full Library</span>
+                </div>
+                <p class="text-xs font-bold mb-3">
+                  Ingin lihat semua playlist rakitanku dan lagu-lagu yang sedang sering kudengarkan minggu ini?
+                </p>
+                <a href="https://open.spotify.com/user/618sf2ln7u25muty9vgeylg2q?si=a7b45010fb7f45bc" target="_blank" rel="noopener noreferrer" onclick="playArcadeSFX('start')"
+                  class="w-full arcade-btn bg-white text-black font-pixel text-[10px] py-3 px-4 rounded-xl flex items-center justify-center gap-2">
+                  <span>🎧 INTIP SEMUA PLAYLIST DI SPOTIFY</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       BAGIAN 5: TOMBOL MERAH "ACAK OPINI!"
+       (Daftar kalimat opini bisa kamu ubah di file script.js)
+  ========================================================== -->
+  <section id="opini" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="bg-gradient-to-r from-retro-yellow via-retro-orange/25 to-retro-pink/25 dark:from-retro-cardDark dark:via-retro-deepPurple/50 dark:to-retro-cardDark neo-box-lg rounded-3xl p-6 sm:p-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-5 flex flex-col items-center text-center">
+          <span class="font-pixel text-[10px] bg-black text-retro-yellow px-3 py-1 rounded-md mb-3">INTERACTIVE GACHA MACHINE</span>
+          <h2 class="font-pixel text-xl sm:text-2xl text-black dark:text-white mb-2">🚨 ACAK OPINI!</h2>
+          <p class="text-sm font-bold text-black/80 dark:text-white/80 mb-6 max-w-xs">
+            Tekan tombol merah raksasa di bawah buat mengeluarkan opini random lucu!
+          </p>
+
+          <div class="bg-gray-200 dark:bg-gray-800 border-4 border-black rounded-3xl p-6 shadow-[8px_8px_0px_#121212] flex flex-col items-center">
+            <button id="bigRedOpinionBtn" onclick="triggerRandomOpinion()"
+              class="big-red-dome w-36 h-36 sm:w-44 sm:h-44 rounded-full flex flex-col items-center justify-center text-white cursor-pointer select-none">
+              <span class="font-pixel text-xs sm:text-sm">TEKAN!</span>
+              <span class="text-xs font-extrabold mt-1">ACAK OPINI</span>
+            </button>
+            <div class="mt-6 font-pixel text-[10px] text-black bg-retro-teal px-3 py-1 rounded border-2 border-black">
+              OPINI: <span id="opinionCountBadge">1/10</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="bg-white dark:bg-black/60 neo-box rounded-3xl p-6 sm:p-8">
+            <div class="flex items-center justify-between border-b-4 border-black pb-3 mb-5">
+              <span class="font-pixel text-xs text-black dark:text-white">🗣️ SIARAN OPINI APIP</span>
+              <span id="opinionCategoryTag" class="font-pixel text-[9px] bg-retro-yellow text-black border-2 border-black px-2.5 py-1 rounded">#KULINER</span>
+            </div>
+
+            <div id="opinionBubbleBox" class="bg-retro-bg dark:bg-retro-cardDark border-4 border-black rounded-2xl p-5 sm:p-6 shadow-[6px_6px_0px_#121212] min-h-[130px] flex items-center">
+              <p id="opinionTextOutput" class="font-grotesk font-extrabold text-lg sm:text-xl text-black dark:text-white">
+                "Bubur ayam itu diaduk atau nggak diaduk sama enaknya, yang salah itu kalau kerupuknya ditaruh paling bawah sampai lembek!"
+              </p>
+            </div>
+
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <button onclick="reactOpinion('🔥 Setuju Banget!')" class="arcade-btn bg-retro-teal text-black text-xs font-extrabold px-3.5 py-2 rounded-xl">🔥 Setuju!</button>
+                <button onclick="reactOpinion('🤣 Ngakak Valid!')" class="arcade-btn bg-retro-yellow text-black text-xs font-extrabold px-3.5 py-2 rounded-xl">🤣 Valid!</button>
+                <button onclick="reactOpinion('🤔 Debatable nih!')" class="arcade-btn bg-retro-pink text-white text-xs font-extrabold px-3.5 py-2 rounded-xl">🤔 Debatable</button>
+              </div>
+              <span id="opinionReactionFeedback" class="text-xs font-pixel text-retro-purple dark:text-retro-yellow"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       BAGIAN 6: BUKU TAMU (GUESTBOOK) & LINK SOSIAL MEDIA
+       (Ubah link Instagram, GitHub, LinkedIn, dan Email di bawah)
+  ========================================================== -->
+  <section id="guestbook" class="max-w-6xl mx-auto px-4 py-14">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Form Kirim Pesan -->
+      <div class="lg:col-span-7 bg-white dark:bg-retro-cardDark neo-box-lg rounded-3xl overflow-hidden">
+        <div class="bg-retro-teal text-black border-b-4 border-black px-5 py-3 flex items-center justify-between">
+          <span class="font-pixel text-xs">💬 APIP_MESSENGER_98.EXE</span>
+        </div>
+
+        <div class="p-6 sm:p-8">
+          <h2 class="font-pixel text-lg sm:text-2xl text-black dark:text-white mb-2">📬 KIRIM PESAN KE SINI!</h2>
+          <p class="text-sm font-bold text-black/75 dark:text-white/75 mb-6">
+            Mau ngajak kolaborasi, tukar resep kopi, atau isi buku tamu RPG? Tulis di bawah!
+          </p>
+
+          <form id="guestbookForm" onsubmit="submitGuestbook(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-pixel text-[10px] mb-2 text-black dark:text-white">NAMA KAMU *</label>
+                <input type="text" id="gbName" required placeholder="Contoh: Raka_99"
+                  class="w-full bg-retro-bg dark:bg-black/50 text-black dark:text-white font-bold px-4 py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_#121212] focus:outline-none" />
+              </div>
+              <div>
+                <label class="block font-pixel text-[10px] mb-2 text-black dark:text-white">PILIH TOPIK</label>
+                <select id="gbMood"
+                  class="w-full bg-retro-bg dark:bg-black/50 text-black dark:text-white font-bold px-4 py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_#121212] focus:outline-none">
+                  <option value="☕ Ngajak Ngopi">☕ Ngajak Ngopi</option>
+                  <option value="🚀 Kolaborasi Project">🚀 Kolaborasi Project</option>
+                  <option value="🎮 Mabar Game Retro">🎮 Mabar Game Retro</option>
+                  <option value="👋 Sekadar Sapa!">👋 Sekadar Sapa!</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-pixel text-[10px] mb-2 text-black dark:text-white">PESAN KAMU *</label>
+              <textarea id="gbMessage" rows="3" required placeholder="Ketik pesan seru kamu di sini..."
+                class="w-full bg-retro-bg dark:bg-black/50 text-black dark:text-white font-bold px-4 py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_#121212] focus:outline-none"></textarea>
+            </div>
+
+            <button type="submit"
+              class="w-full arcade-btn bg-retro-orange text-white font-pixel text-sm py-4 rounded-2xl">
+              🚀 KIRIM! (PRESS START)
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Log Buku Tamu & Link Sosmed -->
+      <div class="lg:col-span-5 flex flex-col justify-between gap-6">
+        <div class="bg-retro-yellow text-black neo-box rounded-3xl p-6 flex-1">
+          <div class="flex items-center justify-between border-b-4 border-black pb-3 mb-4">
+            <span class="font-pixel text-xs">📜 LOG BUKU TAMU</span>
+            <span class="font-pixel text-[10px] bg-black text-retro-teal px-2 py-0.5 rounded">LIVE</span>
+          </div>
+
+          <div id="guestbookLogList" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+            <div class="bg-white border-3 border-black rounded-xl p-3 shadow-[4px_4px_0px_#121212]">
+              <div class="flex justify-between text-xs font-extrabold text-retro-purple mb-1">
+                <span>@Dimas_Voxel</span>
+                <span>☕ Ngajak Ngopi</span>
+              </div>
+              <p class="text-sm font-bold">"Desain 3D clay & tombol arcadenya berasa main konsol beneran!"</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- UBAH LINK SOSIAL MEDIA KAMU DI SINI (Ganti href="...") -->
+        <div class="bg-retro-purple text-white neo-box rounded-3xl p-6">
+          <div class="font-pixel text-xs text-retro-yellow mb-4">🌐 CONNECT VIA SOSMED:</div>
+          <div class="grid grid-cols-2 gap-3">
+            <a href="https://instagram.com/username_kamu" target="_blank" rel="noopener noreferrer" onclick="playArcadeSFX('blip')"
+              class="arcade-btn bg-retro-pink text-white font-pixel text-[10px] py-3 px-3 rounded-xl flex items-center justify-center gap-2">
+              <span>📸</span> <span>INSTAGRAM</span>
+            </a>
+            <a href="https://github.com/username_kamu" target="_blank" rel="noopener noreferrer" onclick="playArcadeSFX('blip')"
+              class="arcade-btn bg-white text-black font-pixel text-[10px] py-3 px-3 rounded-xl flex items-center justify-center gap-2">
+              <span>👾</span> <span>GITHUB</span>
+            </a>
+            <a href="https://linkedin.com/in/username_kamu" target="_blank" rel="noopener noreferrer" onclick="playArcadeSFX('blip')"
+              class="arcade-btn bg-retro-teal text-black font-pixel text-[10px] py-3 px-3 rounded-xl flex items-center justify-center gap-2">
+              <span>💼</span> <span>LINKEDIN</span>
+            </a>
+            <a href="mailto:emailkamu@gmail.com" onclick="playArcadeSFX('blip')"
+              class="arcade-btn bg-retro-yellow text-black font-pixel text-[10px] py-3 px-3 rounded-xl flex items-center justify-center gap-2">
+              <span>✉️</span> <span>EMAIL ME</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER BAWAH -->
+  <footer class="max-w-6xl mx-auto px-4 pb-12 pt-4">
+    <div class="bg-black text-white border-4 border-black rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-bold text-xs sm:text-sm">
+        © 2026 <span class="text-retro-yellow">APIP’S RETRO SPACE</span> • Dibuat dengan Kopi & Semangat 90-an.
+      </p>
+      <a href="#hero" onclick="playArcadeSFX('jump')"
+        class="arcade-btn bg-retro-yellow text-black font-pixel text-[10px] px-4 py-2.5 rounded-xl">
+        ⬆ KE ATAS
+      </a>
+    </div>
+  </footer>
+
+  <!-- Memanggil File Logika JavaScript Terpisah (script.js) -->
+  <script src="script.js"></script>
+</body>
+</html>
