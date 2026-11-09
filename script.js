@@ -13,64 +13,40 @@
 
 // 1A. Teks yang muncul saat 6 ornamen 3D di sekeliling avatar diklik:
 const ornamentDialogs = {
-  crt: '🖥️ "Monitor CRT tabung ini resolusinya cuma 800x600 tapi nostalgianya 4K Ultra HD!"',
-  floppy: '💾 "Disket 1.44MB: Cukup buat nyimpen 1 dokumen Word dan kenangan masa kecil!"',
-  coffee: '☕ "Kopi ke-3 hari ini! Selama masih ada biji Arabika, bug sebesar apapun bisa dijinakkan."',
-  gamepad: '🎮 "Konami Code: Atas, Atas, Bawah, Bawah, Kiri, Kanan, Kiri, Kanan, B, A!"',
-  cassette: '📼 "Kaset pita kalau kusut tinggal diputer pakai pensil 2B. Anak zaman sekarang mana tahu!"',
-  pizza: '🍕 "Slice pizza hangat = +100 Stamina buat lanjut marathon film sci-fi 90-an!"'
+  crt: '🖥️ "Lalaland harusnya Oscar Winner!"',
+  floppy: '💾 "Buat Nyimpen Save GTA SA!"',
+  coffee: '☕ "Hidup KOPKEN."',
+  gamepad: '🎮 "Cheat Darah Putih: Atas, Atas, Bawah, Bawah, Kiri, Kanan, Kiri, Kanan, B, A!"',
+  cassette: '📼 "Aseli, Lagu Blur napa enak bener yak"',
+  pizza: '🍕 "Nasi Padang Paling best!"'
 };
 
 // 1B. Teks sapaan saat karakter/avatar di tengah diklik:
 const characterGreetings = [
-  '"Halo! Suka hoodie hijau sage-ku nggak? Paling nyaman dipakai nongkrong di coffeeshop nih! 🧥☕"',
-  '"Rambut belah tengah ala 90-an tetap paling ikonik sepanjang masa! 😎"',
-  '"Jangan lupa seduh kopi dulu sebelum scroll ke bawah ya! ☕"',
-  '"Coba klik tombol merah raksasa di bagian Acak Opini, dijamin seru! 🚨"'
+  '"Halo! jangan lupa makan yak! 🧥☕"',
+  '"Liverpool Juara Musim ini! 😎"',
+  '"Jangan lupa seduh scroll ke bawah ya! ☕"',
+  '"Coba klik tombol merah di bagian Acak Opini! 🚨"'
 ];
 
 // 1C. Daftar Opini Random Lucu (Muncul saat tombol merah "ACAK OPINI!" ditekan):
 // Kamu bebas menambah atau mengubah isi teks di dalam tanda kutip di bawah ini!
 const randomOpinions = [
   {
-    tag: '#KULINER',
-    text: '"Bubur ayam itu diaduk atau nggak diaduk sama enaknya, yang salah itu kalau kerupuknya ditaruh paling bawah sampai lembek!"'
+    tag: '#MANGEAK',
+    text: '"Bubur ga diaduk punya kenikmatan tersendiri!"'
   },
   {
     tag: '#NOSTALGIA',
-    text: '"Tiup bagian bawah kaset Nintendo/Sega sebenarnya nggak benerin apa-apa secara ilmiah, tapi 100% berhasil karena kekuatan doa!"'
+    text: '"Pesawat Kertas ditiup biar pas terbang lancar!"'
   },
   {
     tag: '#KOPI',
-    text: '"Bilang \'nggak bisa tidur kalau minum kopi\' padahal habis minum es kopi susu masih bisa tidur pulas 8 jam itu bakat terpendam."'
+    text: '"Dippio tambah floridina enak bener."'
   },
   {
-    tag: '#GAMING',
-    text: '"Save game 3 kali berturut-turut di PS1 bukan karena pelupa, tapi karena trust issue sama Memory Card 8MB bajakan!"'
-  },
-  {
-    tag: '#CODING',
-    text: '"90% waktu ngoding itu dipakai buat mikirin nama variabel dan milih playlist musik, 10% sisanya baru ngetik kode."'
-  },
-  {
-    tag: '#PAPEDA',
-    text: '"Bikin papeda itu ujian kesabaran tingkat tinggi: kurang panas jadi tepung cair, kebanyakan air jadi sup sagu!"'
-  },
-  {
-    tag: '#DESAIN',
-    text: '"Desain minimalis memang rapi, tapi web dengan tombol 3D membal dan warna retro pop jauh lebih bikin bahagia!"'
-  },
-  {
-    tag: '#FILM90AN',
-    text: '"Efek praktikal robot & monster di film tahun 90-an sering kelihatan lebih nyata daripada CGI ratusan juta dolar zaman sekarang."'
-  },
-  {
-    tag: '#WARNET',
-    text: '"Suara ketikan keyboard mekanikal zaman sekarang sebenarnya cuma usaha kita buat mengulang memori suara warnet tahun 2006."'
-  },
-  {
-    tag: '#HIDUP',
-    text: '"Dewasa itu ketika kamu lebih excited beli alat seduh kopi baru atau panci anti lengket daripada beli sepatu hypebeast."'
+    tag: '#FILM',
+    text: '"Yang suka Film Horor Psikopat anjir."'
   }
 ];
 
