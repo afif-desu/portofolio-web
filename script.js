@@ -678,6 +678,24 @@ const tracks = [
     searchQuery: 'Gene Save Me I\'m Yours',
     poster: 'https://upload.wikimedia.org/wikipedia/en/3/3f/Drawn_to_the_Deep_End.jpg',
     notes: [246.9, 293.7, 370.0, 493.9, 440.0, 370.0, 329.6, 293.7]
+  },
+     {
+    title: '07. The Adams — Timur',
+    artistBadge: 'THE ADAMS • AGTERPLAAS (2019)',
+    embedUrl: 'https://open.spotify.com/embed/track/2bEuh25NMtUEQGu6VqohPu?utm_source=generator&theme=0',
+    spotifyUrl: 'https://open.spotify.com/track/2bEuh25NMtUEQGu6VqohPu?si=496c08e2e25b4ea1',
+    searchQuery: 'The Adams Timur',
+    poster: 'https://i.scdn.co/image/ab67616d0000b273848d417028ad1eb2f8ff9c26',
+    notes: [329.6, 392.0, 440.0, 493.9, 587.3, 493.9, 440.0, 392.0]
+  },
+     {
+    title: '08. The Cascades — Rhythm of the Rain',
+    artistBadge: 'THE CASCADES • RHYTHM OF THE RAIN (1963)',
+    embedUrl: 'https://open.spotify.com/embed/track/7GHf8dQ2wA71wYOuRsQCZP?utm_source=generator&theme=0',
+    spotifyUrl: 'https://open.spotify.com/track/7GHf8dQ2wA71wYOuRsQCZP?si=24045e42b0984ed9',
+    searchQuery: 'The Cascades Rhythm of the Rain',
+    poster: 'https://i.scdn.co/image/ab67616d0000b27334c055c6372f01c475caf6e5',
+    notes: [392.0, 440.0, 493.9, 587.3, 523.2, 493.9, 440.0, 392.0]
   }
 ];
 
